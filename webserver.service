@@ -1,0 +1,11 @@
+[Unit]
+Description=Web Server
+
+[Service]
+Type=simple
+KillMode=control-group
+ExecStart=/home/pi/web/venv/bin/python3 /home/pi/web/server.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

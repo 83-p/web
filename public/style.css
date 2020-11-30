@@ -1,0 +1,40 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 10px;
+}
+.card {
+  display: grid;
+  grid-template-rows: max-content 250px 1fr;
+  border: 1px solid #999;
+  border-radius: 3px;
+}
+.card img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.card_img_top_left {
+  object-position: 0 0;
+}
+.card_img_top {
+  object-position: 50% 0;
+}
+.content {
+  margin: 6px 6px 6px 6px;
+}
+.button {
+  font-size: 120%;
+  display: block;
+  width: 80%;
+  border-radius: 5px;
+  border: 1px solid;
+  border-color: black;
+  color: black;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-align: center;
+  text-decoration: none;
+  margin-left: auto;
+  margin-right: auto;
+}
