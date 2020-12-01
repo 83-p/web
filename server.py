@@ -39,7 +39,7 @@ class Poweroff(cherrypy.process.plugins.SimplePlugin):
     def run(self):
         action = 'poweroff'
         if self._restart:
-            action = 'restart'
+            action = 'reboot'
         os.system('sudo /bin/systemctl {}'.format(action))
 
     def delay_start(self):
