@@ -1,15 +1,9 @@
 {% extends "base.html" %}
-  {% block body %}
+  {% block cards %}
+    {{ super() }}
     <article class="card">
       <header></header>
-      <img src="static/img/computer_single_board.png">
-      <div class="content">
-        <h2>{{ nodename }}</h2>
-      </div>
-    </article>
-    <article class="card">
-      <header></header>
-      <img src="static/img/internet_modem_router.png">
+      <img src="/static/img/internet_modem_router.png">
       <div class="content">
         <table>
           <tr>
@@ -25,18 +19,27 @@
     </article>
     <article class="card">
       <header></header>
-      <img class="card_img_top_left" src="static/img/setsuden_off.png">
+      <img class="card_img_top" src="/static/img/beacon_denpa_hasshinki.png">
       <div class="content">
-        <a class="button" href="javascript:void(0);" onclick="var ok=confirm('Do you want to turn off the power?');
-        if (ok) location.href='poweroff?id={{ uuid }}'; return false;">power off...</a>
+	<a class="button" href="/bluetooth">bluetooth</a>
+        {% set bluetooth_power_status = "on" if bluetooth_powered else "off" %}
+        <p>Bluetooth is turned {{ bluetooth_power_status }}</p>
       </div>
     </article>
     <article class="card">
       <header></header>
-      <img class="card_img_top" src="static/img/button_restart1.png">
+      <img class="card_img_top_left" src="/static/img/setsuden_off.png">
+      <div class="content">
+        <a class="button" href="javascript:void(0);" onclick="var ok=confirm('Do you want to turn off the power?');
+        if (ok) location.href='poweroff'; return false;">power off</a>
+      </div>
+    </article>
+    <article class="card">
+      <header></header>
+      <img class="card_img_top" src="/static/img/button_restart1.png">
       <div class="content">
         <a class="button" href="javascript:void(0);" onclick="var ok=confirm('Do you want to restart?');
-        if (ok) location.href='restart?id={{ uuid }}'; return false;">restart...</a>
+        if (ok) location.href='restart'; return false;">restart</a>
       </div>
     </article>
   {% endblock %}

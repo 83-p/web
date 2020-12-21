@@ -1,17 +1,23 @@
 {% extends "base.html" %}
   {% block cards %}
-    {{ super() }}
+    <article class="card">
+      <header></header>
+      <img class="card_img_top" src="/static/img/beacon_denpa_hasshinki.png">
+      <div class="content">
+	<p><a href="/bluetooth">bluetooth</a></p>
+      </div>
+    </article>
     <article class="card">
       <header></header>
       <img src="/static/img/run_cat_smile.png">
       <div class="content">
-        <p>Restart. Please wait.</p>
+        <p>Turn {{ on_off }}. Please wait.</p>
 	<div id="timer"></div>
       </div>
     </article>
     <script>
-      var count = 180;
-      var redirect_to = '/'
+      var count = 3;
+      var redirect_to = '/bluetooth'
       var counter = setInterval(timer, 1000);
       function timer() {
         count = count - 1;

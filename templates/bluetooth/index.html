@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+  {% block cards %}
+    {{ super() }}
+    <article class="card">
+      <header></header>
+      <img class="card_img_top" src="/static/img/beacon_denpa_hasshinki.png">
+      <div class="content">
+        {% set on_off = "off" if powered else "on" %}
+        <a class="button" href="power?on_off={{ on_off }}">turn {{ on_off }}</a>
+        {% set status = "on" if powered else "off" %}
+        <p>Bluetooth is turned {{ status }}</p>
+      </div>
+    </article>
+  {% endblock %}

@@ -1,14 +1,21 @@
 <head>
   <title>{{ nodename }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="cards">
-    {% block body %}
+    {% block cards %}
+    <article class="card">
+      <header></header>
+      <img src="/static/img/computer_single_board.png">
+      <div class="content">
+        <p><a class="home" href="/">{{ nodename }}</a></p>
+      </div>
+    </article>
     {% endblock %}
   </div>
-  <hr>
+  <hr align="left" width="200px">
   <footer>
   @irasutoya, Thank you for the wonderful illustration!
   </footer>

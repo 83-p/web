@@ -23,6 +23,12 @@
 .content {
   margin: 6px 6px 6px 6px;
 }
+.home {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 150%;
+  color: black;
+}
 .button {
   font-size: 120%;
   display: block;

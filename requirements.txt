@@ -1,5 +1,7 @@
 CherryPy
+dbus-python
 flake8
 hacking
 Jinja2
 netifaces
+PyGObject
