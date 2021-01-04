@@ -11,4 +11,31 @@
         <p>Bluetooth is turned {{ status }}</p>
       </div>
     </article>
+    {% if powered %}
+    {%- for device in devices %}
+    <article class="card">
+      <header></header>
+      <img class="card_img_top" src="/static/img/beacon_denpa_hasshinki.png">
+      <div class="content">
+        {% if device.Connected %}
+        <a class="button" href="disconnect?address={{ device.Address }}">disconnect</a>
+        {% else %}
+	<a class="button" href="connect?address={{ device.Address }}">connect</a>
+        {% endif %}
+        <table>
+          <tr>
+            <td>Name</td><td>{{ device.Name }}</td>
+          </tr>
+          <tr>
+            <td>Address</td><td>{{ device.Address }}</td>
+          </tr>
+          <tr>
+            {% set connected = "yes" if device.Connected else "no" %}
+            <td>Connected</td><td>{{ connected }}</td>
+          </tr>
+        </table>
+      </div>
+    </article>
+    {%- endfor %}
+    {% endif %}
   {% endblock %}

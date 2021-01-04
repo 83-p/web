@@ -61,16 +61,73 @@ class BlueZDbus(cherrypy.process.plugins.SimplePlugin):
             self._manager = dbus.Interface(
                 system_bus.get_object('org.bluez', '/'),
                 'org.freedesktop.DBus.ObjectManager')
+            self._system_bus = system_bus
+
+            self._system_bus.add_signal_receiver(
+                self._interfaces_added,
+                dbus_interface='org.freedesktop.DBus.ObjectManager',
+                signal_name='InterfacesAdded')
+
+            self._system_bus.add_signal_receiver(
+                self._properties_changed,
+                dbus_interface='org.freedesktop.DBus.Properties',
+                signal_name='PropertiesChanged',
+                arg0='org.bluez.Device1',
+                path_keyword='path')
+
+        def _print_properties(self, path, properties):
+            cherrypy.log('Path {}'.format(path))
+            for key in properties.keys():
+                value = properties[key]
+                if (key == 'Class'):
+                    cherrypy.log('  %s = 0x%06x' % (key, value))
+                else:
+                    cherrypy.log('  %s = %s' % (key, value))
 
         def devices(self):
+            cherrypy.log('Devices')
+            _devices = []
             obj = self._manager.GetManagedObjects()
             for path, interface in obj.items():
                 if 'org.bluez.Device1' not in interface:
                     continue
-                device = interface['org.bluez.Device1']
-                cherrypy.log(
-                    'Device {Name} ({Address}): connected={Connected}'.
-                    format(**device))
+                properties = interface['org.bluez.Device1']
+                self._print_properties(path, properties)
+                _device = {
+                    'Name': properties['Name'],
+                    'Address': properties['Address'],
+                    'Connected': properties['Connected'],
+                    'path': path,
+                }
+                _devices.append(_device)
+            return _devices
+
+        def _interfaces_added(self, path, interfaces):
+            if 'org.bluez.Device1' not in interfaces:
+                return
+            properties = interfaces['org.bluez.Device1']
+            cherrypy.log('Interfaces added')
+            self._print_properties(path, properties)
+
+        def _properties_changed(self, interface, changed, invalidated, path):
+            if interface != 'org.bluez.Device1':
+                return
+            cherrypy.log('Properties changed')
+            self._print_properties(path, changed)
+
+        def connect(self, path):
+            cherrypy.log('Connect to {}'.format(path))
+            interface = dbus.Interface(
+                self._system_bus.get_object('org.bluez', path),
+                'org.bluez.Device1')
+            interface.Connect()
+
+        def disconnect(self, path):
+            cherrypy.log('Disconnect {}'.format(path))
+            interface = dbus.Interface(
+                self._system_bus.get_object('org.bluez', path),
+                'org.bluez.Device1')
+            interface.Disconnect()
 
     def _run(self):
         cherrypy.log('Dbus mainloop.run')
@@ -196,12 +253,12 @@ class Bluetooth:
 
     @cherrypy.expose
     def index(self):
-        self._bluez.device.devices()
         return self._template.env.get_template(
             'bluetooth/index.html'
         ).render(
             nodename=os.uname().nodename,
             powered=self._bluez.adapter.powered,
+            devices=self._bluez.device.devices(),
         )
 
     @cherrypy.expose
@@ -218,6 +275,24 @@ class Bluetooth:
         ).render(
             on_off=on_off,
         )
+
+    @cherrypy.expose
+    def connect(self, address=None):
+        for device in self._bluez.device.devices():
+            if address != device['Address']:
+                continue
+            self._bluez.device.connect(device['path'])
+            raise cherrypy.HTTPRedirect('/bluetooth')
+        raise cherrypy.NotFound()
+
+    @cherrypy.expose
+    def disconnect(self, address=None):
+        for device in self._bluez.device.devices():
+            if address != device['Address']:
+                continue
+            self._bluez.device.disconnect(device['path'])
+            raise cherrypy.HTTPRedirect('/bluetooth')
+        raise cherrypy.NotFound()
 
 
 if __name__ == '__main__':
