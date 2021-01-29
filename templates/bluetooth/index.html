@@ -2,7 +2,7 @@
   {% block cards %}
     {{ super() }}
     <article class="card">
-      <header></header>
+      <header><h2>Bluetooth</h2></header>
       <img class="card_img_top" src="/static/img/beacon_denpa_hasshinki.png">
       <div class="content">
         {% set on_off = "off" if powered else "on" %}
@@ -14,7 +14,7 @@
     {% if powered %}
     {%- for device in devices %}
     <article class="card">
-      <header></header>
+      <header><h2>Bluetooth device</h2></header>
       <img class="card_img_top" src="/static/img/beacon_denpa_hasshinki.png">
       <div class="content">
         {% if device.Connected %}

@@ -218,6 +218,14 @@ class Root:
             addrs.append({'interface': iface, 'ipv4': ','.join(ip4addrs)})
         return addrs
 
+    def _dhcp_leases(self):
+        addrs = []
+        with open('/var/lib/misc/dnsmasq.leases') as f:
+            for l in f.readlines():
+                e, m, a, n, i = l.split()
+                addrs.append({'ipv4': a, 'name': n})
+        return addrs
+
     @cherrypy.expose
     def index(self):
         return self._template.env.get_template(
@@ -225,6 +233,7 @@ class Root:
         ).render(
             nodename=os.uname().nodename,
             addrs=self._addresses(),
+            dhcp_leases=self._dhcp_leases(),
             bluetooth_powered=self._bluez.adapter.powered,
         )
 

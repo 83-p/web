@@ -2,7 +2,7 @@
   {% block cards %}
     {{ super() }}
     <article class="card">
-      <header></header>
+      <header><h2>Ipv4 addresses<h2></header>
       <img src="/static/img/internet_modem_router.png">
       <div class="content">
         <table>
@@ -18,7 +18,23 @@
       </div>
     </article>
     <article class="card">
-      <header></header>
+      <header><h2>Dhcp leases<h2></header>
+      <img src="/static/img/computer_single_board.png">
+      <div class="content">
+        <table>
+          <tr>
+            <th>name</th><th>ipv4 address</th>
+          </tr>
+          {%- for lease in dhcp_leases %}
+          <tr>
+            <td>{{ lease.name }}</td><td>{{ lease.ipv4 }}</td>
+          </tr>
+          {%- endfor %}
+        </table>
+      </div>
+    </article>
+    <article class="card">
+      <header><h2>Bluetooth<h2></header>
       <img class="card_img_top" src="/static/img/beacon_denpa_hasshinki.png">
       <div class="content">
 	<a class="button" href="/bluetooth">bluetooth</a>
@@ -27,7 +43,7 @@
       </div>
     </article>
     <article class="card">
-      <header></header>
+      <header><h2>Power off<h2></header>
       <img class="card_img_top_left" src="/static/img/setsuden_off.png">
       <div class="content">
         <a class="button" href="javascript:void(0);" onclick="var ok=confirm('Do you want to turn off the power?');
@@ -35,7 +51,7 @@
       </div>
     </article>
     <article class="card">
-      <header></header>
+      <header><h2>Restart<h2></header>
       <img class="card_img_top" src="/static/img/button_restart1.png">
       <div class="content">
         <a class="button" href="javascript:void(0);" onclick="var ok=confirm('Do you want to restart?');
